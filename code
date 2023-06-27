@@ -1,0 +1,38 @@
+def parse_accounts(file_content):
+    accounts = []
+    success_accs = set()
+    error_accs = set()
+
+    iterations = file_content.split("sleep")
+    for iteration in iterations:
+        words = iteration.split()
+
+        for word in words:
+            if word.startswith("0x") and len(word) == 42:
+                accounts.append(word)
+
+                if "SUCCESS" in words:
+                    success_accs.add(word)
+                if "ERROR" in words:
+                    error_accs.add(word)
+
+    # Save success accounts to file
+    with open("success_accs.txt", "w") as file:
+        file.write("\n".join(success_accs))
+
+    # Save error accounts to file
+    with open("error_accs.txt", "w") as file:
+        file.write("\n".join(error_accs))
+
+    return accounts
+
+# Read the text file
+text_file = "text.txt"  # Replace with your actual file name or path
+
+with open(text_file, 'r') as file:
+    file_content = file.read()
+
+# Parse and print the accounts
+accounts = parse_accounts(file_content)
+for account in accounts:
+    print(account)
